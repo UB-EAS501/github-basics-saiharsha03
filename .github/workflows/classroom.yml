@@ -1,0 +1,27 @@
+name: GitHub Classroom Workflow
+#Any modifications to this file constitute a violation of the academic integrity policy and will be severely punished.
+on: [push]
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  build:
+    name: Autograding
+    runs-on: self-hosted
+    #runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install numpy
+        run: pip install numpy
+      - name: Create cleanup script
+        run: echo "rm -rf $PWD" > /cleanup.sh
+      - name: Clone unit test repo
+        run: git clone https://github.com/UB-EAS501/unitTests.git
+      - name: Copy unit tests
+        run: cp -rf ./unitTests/* ./               
+      - name: Check python version
+        run: python3 --version
+      - uses: education/autograding@v1
